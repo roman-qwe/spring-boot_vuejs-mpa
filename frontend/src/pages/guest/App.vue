@@ -1,20 +1,22 @@
 <template>
   <div id="app">
-    <navbar/>
-    <b-container fluid>
-      <router-view></router-view>
-    </b-container>
+    <div>
+      <local-navbar />
+      <common-body />
+    </div>
   </div>
 </template>
 
 
 <script>
-import Navbar from "./components/navbar/Navbar.vue";
+import LocalNavbar from "./components/navbar/Navbar";
+import CommonBody from "@/components/ui/body/Body";
 
 export default {
   name: "app",
   components: {
-    Navbar
+    LocalNavbar,
+    CommonBody
   }
 };
 </script>
