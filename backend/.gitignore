@@ -27,3 +27,8 @@ HELP.md
 
 ### VS Code ###
 .vscode/
+
+#
+.attach*
+*mvn*
+src/main/resources
