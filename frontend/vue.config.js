@@ -4,16 +4,16 @@ module.exports = {
     outputDir: 'target/dist',
     assetsDir: 'assets',
     pages: {
-        free: {
+        guest: {
             // точка входа для страницы
-            entry: 'src/pages/free/main.js',
+            entry: 'src/pages/guest/main.js',
             // исходный шаблон
-            template: 'public/pages/free/index.html',
+            template: 'public/pages/guest/index.html',
             // в результате будет dist/index.html
-            filename: 'pages/free/index.html',
+            filename: 'pages/guest/index.html',
             // когда используется опция title, то <title> в шаблоне
             // должен быть <title><%= htmlWebpackPlugin.options.title %></title>
-            title: 'FREE',
+            title: 'GUEST',
             // все фрагменты, добавляемые на этой странице, по умолчанию
             // это извлеченные общий фрагмент и вендорный фрагмент.
             // chunks: ['chunk-vendors', 'chunk-common', 'index']
@@ -34,7 +34,7 @@ module.exports = {
     configureWebpack: {
         resolve: {
             alias: {
-                '_free': path.resolve(__dirname, 'src/pages/free')
+                '_guest': path.resolve(__dirname, 'src/pages/guest')
             }
         },
     }
