@@ -31,4 +31,5 @@ HELP.md
 #
 .attach*
 *mvn*
-src/main/resources
+src/main/resources/static
+src/main/resources/templates

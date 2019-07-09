@@ -45,6 +45,24 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-thymeleaf</artifactId>
 		</dependency>
+		<dependency>
+			<!-- JPA Data (We are going to use Repositories, Entities, Hibernate, etc...) -->
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-jpa</artifactId>
+			<version>2.1.6.RELEASE</version>
+		</dependency>
+		<dependency>
+			<groupId>org.mariadb.jdbc</groupId>
+			<artifactId>mariadb-java-client</artifactId>
+			<version>2.4.2</version>
+		</dependency>
+		<dependency>
+			<!--Аннотации Getter Builder и т.д.-->
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<version>1.18.8</version>
+			<scope>provided</scope>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -66,7 +84,10 @@
 						<configuration>
 							<filesets>
 								<fileset>
-									<directory>src/main/resources/</directory>
+									<directory>src/main/resources/static</directory>
+								</fileset>
+								<fileset>
+									<directory>src/main/resources/templates</directory>
 								</fileset>
 							</filesets>
 						</configuration>
