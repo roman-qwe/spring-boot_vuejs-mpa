@@ -1,4 +1,4 @@
-package base.backend.model.entity.base;
+package base.backend.model.entity.base.user.role;
 
 import lombok.Getter;
 

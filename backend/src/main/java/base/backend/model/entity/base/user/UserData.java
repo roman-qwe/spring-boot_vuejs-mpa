@@ -1,4 +1,4 @@
-package base.backend.model.entity.base;
+package base.backend.model.entity.base.user;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -35,5 +35,8 @@ public class UserData {
 
     @Column
     private String email;
+
+    // @Column
+    // private Date dateRegistration; // timestamp
 
 }

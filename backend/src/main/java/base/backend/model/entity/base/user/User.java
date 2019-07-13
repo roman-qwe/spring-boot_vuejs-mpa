@@ -1,10 +1,8 @@
-package base.backend.model.entity.base;
+package base.backend.model.entity.base.user;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -13,14 +11,13 @@ import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 
+import base.backend.model.entity.base.user.role.Role;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-@Getter
-@Setter
+@Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -43,8 +40,9 @@ public class User {
     @Builder.Default
     private Boolean active = true;
 
-    @Enumerated(EnumType.ORDINAL)
-    private Role role;
+    @Column(nullable = false)
+    @Builder.Default
+    private Role role = Role.USER;
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY, targetEntity = UserData.class)
     @PrimaryKeyJoinColumn
