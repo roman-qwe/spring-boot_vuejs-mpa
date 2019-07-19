@@ -20,7 +20,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @Configuration
 @EnableTransactionManagement
 @EnableJpaRepositories(basePackages = { "base.backend.repository" })
-@PropertySource("classpath:properties/base-db.properties")
+@PropertySource("classpath:properties/base_db-${spring.profiles.default}.properties")
 public class BaseDB {
 
     private final String NAME;
