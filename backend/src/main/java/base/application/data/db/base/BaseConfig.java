@@ -2,6 +2,9 @@ package base.application.data.db.base;
 
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
+
+import com.cosium.spring.data.jpa.entity.graph.repository.support.EntityGraphJpaRepositoryFactoryBean;
+
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
@@ -19,7 +22,8 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @Configuration
 @EnableTransactionManagement
-@EnableJpaRepositories(basePackages = { "base.application.data.db.base.repository" })
+@EnableJpaRepositories(basePackages = {
+        "base.application.data.db.base.repository" }, repositoryFactoryBeanClass = EntityGraphJpaRepositoryFactoryBean.class)
 @PropertySource("classpath:config/base_db-${spring.profiles.active}.properties")
 public class BaseConfig {
 

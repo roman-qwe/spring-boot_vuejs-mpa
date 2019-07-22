@@ -18,19 +18,19 @@ import lombok.Setter;
 @Getter
 @Setter
 @Builder
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Entity
-@Table(name = "user_data")
-public class UserData {
+@Table(name = "user_profile")
+public class UserProfile {
 
     @Id
     @Column(name = "data_id", nullable = false, updatable = false)
     private Long id;
 
     @MapsId
-    @OneToOne(targetEntity = User.class, fetch = FetchType.LAZY)
-    @JoinColumn(name = "data_id")
+    @OneToOne(targetEntity = User.class, fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     @Column

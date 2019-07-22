@@ -7,6 +7,9 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedAttributeNode;
+import javax.persistence.NamedEntityGraph;
+import javax.persistence.NamedEntityGraphs;
 import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
@@ -23,6 +26,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Entity
 @Table(name = "user")
+@NamedEntityGraphs(value = {
+        @NamedEntityGraph(name = "User.profile", attributeNodes = { @NamedAttributeNode("profile") }) })
 public class User {
 
     @Id
@@ -44,7 +49,7 @@ public class User {
     @Builder.Default
     private Role role = Role.USER;
 
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY, targetEntity = UserData.class)
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY, targetEntity = UserProfile.class)
     @PrimaryKeyJoinColumn
-    private UserData data;
+    private UserProfile profile;
 }
