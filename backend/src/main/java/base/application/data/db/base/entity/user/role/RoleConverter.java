@@ -1,4 +1,4 @@
-package base.application.model.entity.base.user.role;
+package base.application.data.db.base.entity.user.role;
 
 import java.util.Arrays;
 

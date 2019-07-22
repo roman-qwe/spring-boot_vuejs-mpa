@@ -1,4 +1,4 @@
-package base.application.model.entity.base.user;
+package base.application.data.db.base.entity.user;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -11,7 +11,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 
-import base.application.model.entity.base.user.role.Role;
+import base.application.data.db.base.entity.user.role.Role;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

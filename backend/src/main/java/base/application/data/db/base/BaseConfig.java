@@ -1,4 +1,4 @@
-package base.application.config;
+package base.application.data.db.base;
 
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
@@ -19,16 +19,16 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @Configuration
 @EnableTransactionManagement
-@EnableJpaRepositories(basePackages = { "base.application.repository" })
-@PropertySource("classpath:base_db-${spring.profiles.active}.properties")
-public class BaseDB {
+@EnableJpaRepositories(basePackages = { "base.application.data.db.base.repository" })
+@PropertySource("classpath:config/base_db-${spring.profiles.active}.properties")
+public class BaseConfig {
 
     private final String NAME;
-    private final String PACKAGE_WITH_ENTITY = "base.application.model.entity.base";
+    private final String PACKAGE_WITH_ENTITY = "base.application.data.db.base.entity";
     private final String PROPERTY_PREFIX = "spring.datasource";
     private final String ENTITY_MANAGER_FACTORY_BEAN_NAME = "entityManagerFactory";
 
-    public BaseDB(@Value("${name}") String name) {
+    public BaseConfig(@Value("${name}") String name) {
         NAME = name;
     }
 
@@ -59,12 +59,4 @@ public class BaseDB {
         return new JpaTransactionManager(entityManagerFactory);
     }
 
-    // public DataSourceProperties dataSourceProperties() {
-    // DataSourceProperties dsp = new DataSourceProperties();
-    // dsp.setDriverClassName("org.mariadb.jdbc.Driver");
-    // dsp.setUrl("jdbc:mariadb://localhost:3006/base");
-    // dsp.setUsername("remote-root");
-    // dsp.setPassword("remote-root_password");
-    // return dsp;
-    // }
 }

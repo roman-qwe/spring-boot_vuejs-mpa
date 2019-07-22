@@ -1,4 +1,4 @@
-package base.application.model.entity.base.user;
+package base.application.data.db.base.entity.user;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

@@ -1,6 +1,6 @@
 package base.application.config;
 
-import java.util.List;
+import java.util.Arrays;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -9,17 +9,15 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 
 @Configuration
-public class CustomPropertySources {
+public class PropertyConfig {
 
-    private final static List<String> PROPERTIES = List.of("application.properties", "hibernate.properties",
-            "logger.properties");
+    private static final String[] PROPERTIES = { "config/hibernate.properties", "config/logger.properties" };
 
     @Bean
     public static PropertySourcesPlaceholderConfigurer properties() {
         PropertySourcesPlaceholderConfigurer pspc = new PropertySourcesPlaceholderConfigurer();
-        Resource[] resources = CustomPropertySources.PROPERTIES.stream().map(item -> new ClassPathResource(item))
+        Resource[] resources = Arrays.stream(PROPERTIES).map(item -> new ClassPathResource(item))
                 .toArray(Resource[]::new);
-
         pspc.setLocations(resources);
         pspc.setIgnoreUnresolvablePlaceholders(true);
         return pspc;

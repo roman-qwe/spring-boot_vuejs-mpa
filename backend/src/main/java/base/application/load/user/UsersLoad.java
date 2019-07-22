@@ -3,9 +3,9 @@ package base.application.load.user;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import base.application.model.entity.base.user.User;
-import base.application.model.entity.base.user.role.Role;
-import base.application.repository.base.UserRepository;
+import base.application.data.db.base.entity.user.User;
+import base.application.data.db.base.entity.user.role.Role;
+import base.application.data.db.base.repository.UserRepository;
 import base.application.util.auth.PasswordUtil;
 
 @Component
