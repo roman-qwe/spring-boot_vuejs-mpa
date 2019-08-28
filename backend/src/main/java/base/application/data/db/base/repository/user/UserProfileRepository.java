@@ -1,8 +1,8 @@
 package base.application.data.db.base.repository.user;
 
-import org.springframework.data.repository.CrudRepository;
+import com.cosium.spring.data.jpa.entity.graph.repository.EntityGraphCrudRepository;
 
-import base.application.data.db.base.entity.user.UserProfile;
+import base.application.data.db.base.model.user.entity.UserProfile;
 
-public interface UserProfileRepository extends CrudRepository<UserProfile, Long> {
+public interface UserProfileRepository extends EntityGraphCrudRepository<UserProfile, Long> {
 }

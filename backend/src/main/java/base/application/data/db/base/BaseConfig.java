@@ -28,7 +28,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 public class BaseConfig {
 
     private final String NAME;
-    private final String PACKAGE_WITH_ENTITY = "base.application.data.db.base.entity";
+    private final String PACKAGE_WITH_ENTITY = "base.application.data.db.base.model";
     private final String PROPERTY_PREFIX = "spring.datasource";
     private final String ENTITY_MANAGER_FACTORY_BEAN_NAME = "entityManagerFactory";
 
