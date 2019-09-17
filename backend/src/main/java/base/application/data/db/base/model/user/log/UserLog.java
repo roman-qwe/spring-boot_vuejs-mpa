@@ -13,7 +13,7 @@ import lombok.experimental.SuperBuilder;
 
 @Getter
 @Setter
-@SuperBuilder
+@SuperBuilder(toBuilder = true)
 @NoArgsConstructor
 @AttributeOverride(name = "name", column = @Column(nullable = false, unique = false))
 @Entity

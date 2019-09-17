@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
-@RequestMapping({ "/", "/about", "/login" })
+@RequestMapping({ "/", "/index", "/about", "/login", "/registration", "/guest/**" })
 public class GuestController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(GuestController.class);
