@@ -13,7 +13,8 @@ import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 
 import base.application.data.db.base.model.user.entity.User;
 import lombok.Getter;
@@ -42,12 +43,12 @@ public abstract class GUserProfile {
 
     @Column(name = "date_registration")
     @Temporal(TemporalType.TIMESTAMP)
-    @CreationTimestamp
+    @CreatedDate
     protected Date dateRegistration;
 
     @Column(name = "date_change")
     @Temporal(TemporalType.TIMESTAMP)
-    @CreationTimestamp
+    @LastModifiedDate
     private Date dateChange;
 
     @Override
