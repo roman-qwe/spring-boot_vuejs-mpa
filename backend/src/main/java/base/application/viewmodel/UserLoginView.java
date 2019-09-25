@@ -23,4 +23,9 @@ public class UserLoginView implements Serializable {
     @JsonProperty("password")
     protected String password;
 
+    @Override
+    public String toString() {
+        return String.format("username: %s, password: %s", username,
+                password == null ? "null" : password.substring(0, 5));
+    }
 }

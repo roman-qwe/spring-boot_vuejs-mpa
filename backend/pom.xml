@@ -57,7 +57,7 @@
 			<version>2.4.4</version>
 		</dependency>
 		<dependency>
-			<!--Аннотации Getter Builder и т.д.-->
+			<!--Аннотации Getter, Builder и т.д.-->
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
 			<version>1.18.10</version>
