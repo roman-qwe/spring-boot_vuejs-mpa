@@ -14,7 +14,6 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 
 import base.application.config.security.jwt.JwtConfigurerAdapter;
-import base.application.config.security.jwt.JwtTokenProvider;
 
 @Configuration
 @EnableWebSecurity
@@ -30,7 +29,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private DataSource dataSource;
 
     @Autowired
-    private JwtTokenProvider jwtTokenProvider;
+    private JwtConfigurerAdapter jwtConfigurerAdapter;
 
     @Bean
     @Override
@@ -50,7 +49,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         // http.authorizeRequests().antMatchers("/api/login").permitAll();
 
         http.authorizeRequests().anyRequest().authenticated();
-        http.apply(new JwtConfigurerAdapter(jwtTokenProvider));
+        http.apply(jwtConfigurerAdapter);
         // http.formLogin().loginProcessingUrl("/api/login").loginPage("/login").permitAll().and().logout().permitAll();
 
         // http.rememberMe();

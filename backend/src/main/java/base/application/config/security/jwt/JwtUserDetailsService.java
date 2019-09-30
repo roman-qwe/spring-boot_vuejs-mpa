@@ -14,20 +14,15 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class JwtUserDetailsService implements UserDetailsService {
 
-    private final UserRepository userRepository;
-
     @Autowired
-    public JwtUserDetailsService(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
+    private UserRepository userRepository;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findByName(username);
 
-        if (user == null) {
+        if (user == null)
             throw new UsernameNotFoundException("User with username: " + username + " not found");
-        }
 
         JwtUser jwtUser = JwtUser.from(user);
         log.info("IN loadUserByUsername - user with username: {} successfully loaded", username);
