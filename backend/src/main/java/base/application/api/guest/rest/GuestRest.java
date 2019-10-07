@@ -36,19 +36,20 @@ public class GuestRest {
 
     @PostMapping("login")
     public ResponseEntity login(@RequestBody UserLoginView userLoginView) {
-        log.info("IN login - userLoginView with {}", userLoginView);
-
-        log.info("++++ IN GuestRest login: {}", userLoginView == null || !userLoginView.isValid());
+        log.info("IN GuestRest login - userLoginView with {}", userLoginView);
 
         if (userLoginView == null || !userLoginView.isValid())
             throw new BadCredentialsException("Invalid username or password");
-        log.info("userLoginView: {}", userLoginView.isValid());
 
         try {
             String username = userLoginView.getUsername();
             Authentication auth = authManager
                     .authenticate(new UsernamePasswordAuthenticationToken(username, userLoginView.getPassword()));
-            log.info("auth = {}", auth.isAuthenticated());
+
+            log.info("IN GuestRest login - auth: {}", auth);
+
+            if (auth != null)
+                log.info("auth = {}", auth.isAuthenticated());
 
             User user = userRepository.findByName(username);
 

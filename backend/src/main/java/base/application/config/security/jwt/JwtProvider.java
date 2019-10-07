@@ -16,6 +16,7 @@ import base.application.data.db.base.model.user.general.GUser;
 import base.application.util.auth.PasswordUtil;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.extern.slf4j.Slf4j;
@@ -26,7 +27,7 @@ public class JwtProvider {
     private final String SECRET = "super_secret_jwt_string";
     private final String ENCODED_SECRET;
 
-    private final long VALIDATE_MILLISECONDS = 3_600_000;
+    private final long VALIDATE_MILLISECONDS = 1000 * 60 * 60;
 
     public static final String HEADER = "Authorization";
     public static final String PREFIX = "Bearer_";
@@ -62,10 +63,18 @@ public class JwtProvider {
         String token = refinement(uToken);
         if (token == null)
             return false;
+        log.info("IN JwtProvider - validate token: {}", token);
+        Jws<Claims> claims = null;
 
-        Jws<Claims> claims = Jwts.parser().setSigningKey(ENCODED_SECRET).parseClaimsJws(token);
+        try {
+            claims = Jwts.parser().setSigningKey(ENCODED_SECRET).parseClaimsJws(token);
+        } catch (JwtException | IllegalArgumentException e) {
+            return false;
+        }
 
-        if (claims.getBody().getExpiration().before(new Date()))
+        log.info("IN JwtProvider - validate claims: {}", claims);
+
+        if (claims != null && claims.getBody().getExpiration().before(new Date()))
             return false;
 
         return true;

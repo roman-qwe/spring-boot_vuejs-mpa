@@ -2,10 +2,9 @@ package base.application.config.security.jwt;
 
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
 
 import javax.servlet.FilterChain;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -37,22 +36,23 @@ public class JwtFilter extends OncePerRequestFilter {
             return;
         }
 
-        List<Cookie> tokenCookies = Arrays.stream(cookies).filter(a -> a.getName().equals(JwtProvider.HEADER))
-                .collect(Collectors.toList());
+        Cookie tokenCookie = Arrays.stream(cookies).filter(a -> a.getName().equals(JwtProvider.HEADER)).findFirst()
+                .get();
 
-        if (tokenCookies == null || tokenCookies.size() == 0) {
+        if (tokenCookie == null) {
             filterChain.doFilter(req, res);
             return;
         }
 
-        String token = tokenCookies.get(0).getValue();
-        log.info("IN JwtFilter doFilterInternal token: {}", token);
+        String token = tokenCookie.getValue();
+        log.info("IN JwtFilter - doFilterInternal token: {}", token);
         if (token == null) {
             filterChain.doFilter(req, res);
             return;
         }
 
         if (!jwtProvider.validate(token)) {
+            log.info("IN JwtFilter - doFilterInternal validate failed");
             filterChain.doFilter(req, res);
             return;
         }
