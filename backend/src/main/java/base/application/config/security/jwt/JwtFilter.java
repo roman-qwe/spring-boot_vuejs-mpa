@@ -2,9 +2,9 @@ package base.application.config.security.jwt;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Optional;
 
 import javax.servlet.FilterChain;
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -36,14 +36,15 @@ public class JwtFilter extends OncePerRequestFilter {
             return;
         }
 
-        Cookie tokenCookie = Arrays.stream(cookies).filter(a -> a.getName().equals(JwtProvider.HEADER)).findFirst()
-                .get();
+        Optional<Cookie> oTokenCookie = Arrays.stream(cookies).filter(a -> a.getName().equals(JwtConfig.HEADER))
+                .findFirst();
 
-        if (tokenCookie == null) {
+        if (oTokenCookie == null || oTokenCookie.isEmpty()) {
             filterChain.doFilter(req, res);
             return;
         }
 
+        Cookie tokenCookie = oTokenCookie.get();
         String token = tokenCookie.getValue();
         log.info("IN JwtFilter - doFilterInternal token: {}", token);
         if (token == null) {
@@ -62,6 +63,10 @@ public class JwtFilter extends OncePerRequestFilter {
             filterChain.doFilter(req, res);
             return;
         }
+
+        String nextToken = jwtProvider.create(auth);
+        tokenCookie.setValue(nextToken);
+        res.addCookie(tokenCookie);
 
         SecurityContextHolder.getContext().setAuthentication(auth);
         filterChain.doFilter(req, res);

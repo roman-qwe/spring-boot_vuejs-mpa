@@ -1,14 +1,15 @@
 package base.application.config.security.jwt;
 
-import java.util.Base64;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
+import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
@@ -24,38 +25,45 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Component
 public class JwtProvider {
-    private final String SECRET = "super_secret_jwt_string";
-    private final String ENCODED_SECRET;
-
-    private final long VALIDATE_MILLISECONDS = 1000 * 60 * 60;
-
-    public static final String HEADER = "Authorization";
-    public static final String PREFIX = "Bearer_";
-
-    @Autowired
-    private UserDetailsService userDetailsService;
 
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
         return PasswordUtil.B_CRYPT_PASSWORD_ENCODER;
     }
 
-    public JwtProvider() {
-        ENCODED_SECRET = Base64.getEncoder().encodeToString(SECRET.getBytes());
+    public String create(GUser user) {
+        if (user == null || user.getName() == null || user.getRole() == null)
+            return null;
+        return generateToken(user.getName(), user.getRole().getName());
     }
 
-    public String create(GUser user) {
-        Claims claims = Jwts.claims().setSubject(user.getName());
-        claims.put("role", user.getRole().getName());
+    public String create(Authentication auth) {
+        log.info("IN create Authentication auth.getAuthorities().stream().findFirst().get().getAuthority(): ",
+                auth.getAuthorities().stream().findFirst().get().getAuthority());
+        String username = auth.getName();
+        if (username == null)
+            return null;
+        Optional<? extends GrantedAuthority> oRole = auth.getAuthorities().stream().findFirst();
+        if (oRole == null || oRole.isEmpty())
+            return null;
+        String role = oRole.get().getAuthority();
+        if (role == null)
+            return null;
+        return generateToken(username, role);
+    }
+
+    private String generateToken(String username, String role) {
+        Claims claims = Jwts.claims().setSubject(username);
+        claims.put("role", role);
 
         Date now = new Date();
-        Date validity = new Date(now.getTime() + VALIDATE_MILLISECONDS);
+        Date validity = new Date(now.getTime() + JwtConfig.VALIDATE_MILLISECONDS);
 
-        return PREFIX + Jwts.builder()//
+        return JwtConfig.PREFIX + Jwts.builder()//
                 .setClaims(claims)//
                 .setIssuedAt(now)//
                 .setExpiration(validity)//
-                .signWith(SignatureAlgorithm.HS256, ENCODED_SECRET)//
+                .signWith(SignatureAlgorithm.HS256, JwtConfig.ENCODED_SECRET)//
                 .compact();
     }
 
@@ -67,7 +75,7 @@ public class JwtProvider {
         Jws<Claims> claims = null;
 
         try {
-            claims = Jwts.parser().setSigningKey(ENCODED_SECRET).parseClaimsJws(token);
+            claims = Jwts.parser().setSigningKey(JwtConfig.ENCODED_SECRET).parseClaimsJws(token);
         } catch (JwtException | IllegalArgumentException e) {
             return false;
         }
@@ -86,20 +94,26 @@ public class JwtProvider {
             return null;
 
         log.info("IN getAuthentication - token: {}", token);
-        UserDetails userDetails = userDetailsService.loadUserByUsername(getUsername(token));
-        if (userDetails == null)
-            return null;
 
-        return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
+        Jws<Claims> parsedToken = Jwts.parser().setSigningKey(JwtConfig.ENCODED_SECRET).parseClaimsJws(token);
+        String username = getUsername(token);
+        Collection<? extends GrantedAuthority> authorities = Collections
+                .singleton(new SimpleGrantedAuthority((String) parsedToken.getBody().get("role")));
+
+        log.info("IN getAuthentication - authorities.size(): {}", authorities.size());
+        if (username != null) {
+            return new UsernamePasswordAuthenticationToken(username, null, authorities);
+        }
+        return null;
     }
 
     private String refinement(String token) {
-        if (!token.startsWith(PREFIX))
+        if (!token.startsWith(JwtConfig.PREFIX))
             return null;
-        return token.substring(PREFIX.length(), token.length());
+        return token.substring(JwtConfig.PREFIX.length(), token.length());
     }
 
     private String getUsername(String token) {
-        return Jwts.parser().setSigningKey(ENCODED_SECRET).parseClaimsJws(token).getBody().getSubject();
+        return Jwts.parser().setSigningKey(JwtConfig.ENCODED_SECRET).parseClaimsJws(token).getBody().getSubject();
     }
 }
