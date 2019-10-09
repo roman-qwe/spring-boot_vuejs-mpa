@@ -1,8 +1,6 @@
 package base.application.config.security.jwt;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.Optional;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -28,24 +26,14 @@ public class JwtFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest req, HttpServletResponse res, FilterChain filterChain)
             throws ServletException, IOException {
-        HttpServletRequest httpReq = (HttpServletRequest) req;
 
-        Cookie[] cookies = httpReq.getCookies();
-        if (cookies == null) {
+        Cookie cookie = jwtProvider.getTokenCookie(req);
+        if (cookie == null) {
             filterChain.doFilter(req, res);
             return;
         }
 
-        Optional<Cookie> oTokenCookie = Arrays.stream(cookies).filter(a -> a.getName().equals(JwtConfig.HEADER))
-                .findFirst();
-
-        if (oTokenCookie == null || oTokenCookie.isEmpty()) {
-            filterChain.doFilter(req, res);
-            return;
-        }
-
-        Cookie tokenCookie = oTokenCookie.get();
-        String token = tokenCookie.getValue();
+        String token = cookie.getValue();
         log.info("IN JwtFilter - doFilterInternal token: {}", token);
         if (token == null) {
             filterChain.doFilter(req, res);
@@ -65,8 +53,8 @@ public class JwtFilter extends OncePerRequestFilter {
         }
 
         String nextToken = jwtProvider.create(auth);
-        tokenCookie.setValue(nextToken);
-        res.addCookie(tokenCookie);
+        cookie.setValue(nextToken);
+        res.addCookie(cookie);
 
         SecurityContextHolder.getContext().setAuthentication(auth);
         filterChain.doFilter(req, res);

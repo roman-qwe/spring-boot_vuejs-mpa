@@ -11,7 +11,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 
 import base.application.config.security.jwt.JwtConfigurerAdapter;
 
@@ -46,25 +45,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests().antMatchers(USER_ENDPOINT).hasAnyAuthority("ADMIN", "USER");
         http.authorizeRequests().antMatchers(ADMIN_ENDPOINT).hasAuthority("ADMIN");
 
-        // http.authorizeRequests().antMatchers("/api/login").permitAll();
-
         http.authorizeRequests().anyRequest().authenticated();
         http.apply(jwtConfigurerAdapter);
-        // http.formLogin().loginProcessingUrl("/api/login").loginPage("/login").permitAll().and().logout().permitAll();
 
         // http.rememberMe();
-        http.csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse());
-        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+        // http.csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse());
     }
-
-    // @Override
-    // protected void configure(AuthenticationManagerBuilder auth) throws Exception
-    // {
-    // auth.jdbcAuthentication().dataSource(dataSource).passwordEncoder(PasswordUtil.B_CRYPT_PASSWORD_ENCODER)
-    // .usersByUsernameQuery("select name username, password, active from user where
-    // name=?")
-    // .authoritiesByUsernameQuery("select name username, role roles from user where
-    // name = ?");
-    // }
 
 }

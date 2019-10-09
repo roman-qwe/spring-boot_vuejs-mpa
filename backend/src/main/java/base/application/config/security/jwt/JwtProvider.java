@@ -1,10 +1,14 @@
 package base.application.config.security.jwt;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.Optional;
 
+import javax.servlet.http.HttpServletRequest;
+
+import javax.servlet.http.Cookie;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -105,6 +109,22 @@ public class JwtProvider {
             return new UsernamePasswordAuthenticationToken(username, null, authorities);
         }
         return null;
+    }
+
+    public Cookie getTokenCookie(HttpServletRequest req) {
+        HttpServletRequest httpReq = (HttpServletRequest) req;
+
+        Cookie[] cookies = httpReq.getCookies();
+        if (cookies == null) {
+            return null;
+        }
+
+        Optional<Cookie> oCookie = Arrays.stream(cookies).filter(a -> a.getName().equals(JwtConfig.HEADER)).findFirst();
+        if (oCookie == null || oCookie.isEmpty()) {
+            return null;
+        }
+
+        return oCookie.get();
     }
 
     private String refinement(String token) {

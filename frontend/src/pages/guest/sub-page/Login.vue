@@ -39,12 +39,6 @@ export default {
     login: function() {
       console.log("login start");
       let v = this;
-      // const CSRF_TOKEN = document.cookie.match(
-      //   new RegExp(/XSRF-TOKEN=([^;]+)/i)
-      // )[1];
-      // const instance = axios.create({
-      //   headers: { "X-XSRF-TOKEN": CSRF_TOKEN }
-      // });
       AXIOS.post("/guest/login", {
         username: v.username,
         password: v.password
@@ -54,7 +48,7 @@ export default {
           console.log(response);
           console.log("---");
           console.log(response.data.token);
-          document.cookie = "Authorization=" + response.data.token;
+          // document.cookie = "Authorization=" + response.data.token;
         })
         .catch(function(error) {
           console.log("error response");

@@ -19,7 +19,7 @@ public class UsernameUtilTests {
         String[] usernamesFalse = { "name12", "name-_", "123456" };
         Arrays.stream(usernamesFalse)
                 .forEach(a -> assertFalse("check username test: " + a, UsernameUtil.checkError(a)));
-        String[] usernamesTrue = { "name1!", "", "-_", "-_-_-" };
+        String[] usernamesTrue = { "name1!", "", "-_-" };
         Arrays.stream(usernamesTrue).forEach(a -> assertTrue("check username test: ", UsernameUtil.checkError(a)));
     }
 }

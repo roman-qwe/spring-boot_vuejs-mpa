@@ -1,4 +1,4 @@
-const path = require("path");
+var path = require("path");
 // const HtmlWebpackPlugin = require('html-webpack-plugin')
 
 module.exports = {
@@ -15,10 +15,9 @@ module.exports = {
             // когда используется опция title, то <title> в шаблоне
             // должен быть <title><%= htmlWebpackPlugin.options.title %></title>
             title: 'GUEST',
-            csrf: '${_csrf.token}'
-                // все фрагменты, добавляемые на этой странице, по умолчанию
-                // это извлеченные общий фрагмент и вендорный фрагмент.
-                // chunks: ['chunk-vendors', 'chunk-common', 'index']
+            // все фрагменты, добавляемые на этой странице, по умолчанию
+            // это извлеченные общий фрагмент и вендорный фрагмент.
+            // chunks: ['chunk-vendors', 'chunk-common', 'index']
         },
         user: {
             entry: 'src/pages/user/main.js',
@@ -37,6 +36,7 @@ module.exports = {
         resolve: {
             alias: {
                 '_guest': path.resolve(__dirname, 'src/pages/guest')
+                // '_csrf': "${_csrf.token}"
             }
         },
         // plugins: [
@@ -68,4 +68,4 @@ module.exports = {
     //     }
     // }
 
-}
+};
