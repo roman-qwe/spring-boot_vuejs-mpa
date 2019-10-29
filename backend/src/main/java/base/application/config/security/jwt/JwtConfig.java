@@ -7,7 +7,7 @@ public class JwtConfig {
 
     public static final String ENCODED_SECRET = Base64.getEncoder().encodeToString(SECRET.getBytes());
     public static final long VALIDATE_MILLISECONDS = 1000 * 60 * 60;
-    public static final String HEADER = "Authorization";
+    public static final String AUTH_NAME = "Authorization";
     public static final String PREFIX = "Bearer_";
 
 }

@@ -11,15 +11,20 @@ import base.application.data.db.base.model.user.role.Role;
 import base.application.data.db.base.repository.user.UserProfileRepository;
 import base.application.data.db.base.repository.user.UserRepository;
 import base.application.util.auth.PasswordUtil;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Component
 public class UsersLoad {
 
-    @Autowired
     UserRepository userRepository;
+    UserProfileRepository userProfileRepository;
 
     @Autowired
-    UserProfileRepository userProfileRepository;
+    public UsersLoad(UserRepository userRepository, UserProfileRepository userProfileRepository) {
+        this.userRepository = userRepository;
+        this.userProfileRepository = userProfileRepository;
+    }
 
     public void Run() {
         if (!userRepository.existsByName("admin")) {
@@ -39,10 +44,8 @@ public class UsersLoad {
             System.out.println("admin saved");
         }
 
-        System.out
-                .println(userRepository.findByName("user", EntityGraphs.named("User.profile")).getProfile().getEmail());
-
-        System.out.println(userRepository.findByName("user"));
+        log.info("IN Run user with user.profile: {}", userRepository.findByName("user", EntityGraphs.named("User.profile")).getProfile().getEmail());
+        log.info("IN Run simple user: {}", userRepository.findByName("user"));
 
         userProfileRepository.findAll().forEach(System.out::println);
     }

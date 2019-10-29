@@ -46,8 +46,8 @@ export default {
         .then(function(response) {
           console.log("success response");
           console.log(response);
-          console.log("---");
-          console.log(response.data.token);
+          // console.log("---");
+          // console.log(response.data.token);
           // document.cookie = "Authorization=" + response.data.token;
         })
         .catch(function(error) {

@@ -34,8 +34,8 @@ public class UserLoginView implements Serializable {
     }
 
     public boolean isValid() {
-        log.info("-- IN UserLoginView isValid Username: {}", UsernameUtil.checkError(username));
-        log.info("-- IN UserLoginView isValid Password: {}", PasswordUtil.checkError(password));
+        log.info("-- IN UserLoginView isValid Username: {}", !UsernameUtil.checkError(username));
+        log.info("-- IN UserLoginView isValid Password: {}", !PasswordUtil.checkError(password));
 
         return !UsernameUtil.checkError(username) && !PasswordUtil.checkError(password);
     }

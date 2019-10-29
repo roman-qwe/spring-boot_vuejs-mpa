@@ -119,7 +119,7 @@ public class JwtProvider {
             return null;
         }
 
-        Optional<Cookie> oCookie = Arrays.stream(cookies).filter(a -> a.getName().equals(JwtConfig.HEADER)).findFirst();
+        Optional<Cookie> oCookie = Arrays.stream(cookies).filter(a -> a.getName().equals(JwtConfig.AUTH_NAME)).findFirst();
         if (oCookie == null || oCookie.isEmpty()) {
             return null;
         }
