@@ -10,7 +10,9 @@ import org.springframework.stereotype.Component;
 import base.application.data.db.base.model.user.entity.User;
 import base.application.data.db.base.model.user.log.UserLog;
 import base.application.data.db.base.repository.user.UserLogRepository;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Component
 public class UserListener {
 
@@ -19,6 +21,7 @@ public class UserListener {
     @Autowired
     public void init(UserLogRepository userLogRepository) {
         UserListener.userLogRepository = userLogRepository;
+        log.info("IN init userLogRepository autowired success");
     }
 
     @PostPersist

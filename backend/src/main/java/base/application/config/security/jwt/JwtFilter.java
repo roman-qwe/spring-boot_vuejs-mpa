@@ -54,6 +54,7 @@ public class JwtFilter extends OncePerRequestFilter {
 
         String nextToken = jwtProvider.create(auth);
         cookie.setValue(nextToken);
+        cookie.setPath("/");
         res.addCookie(cookie);
 
         SecurityContextHolder.getContext().setAuthentication(auth);

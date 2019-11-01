@@ -6,9 +6,9 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.Optional;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
-import javax.servlet.http.Cookie;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
