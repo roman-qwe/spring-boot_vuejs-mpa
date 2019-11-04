@@ -1,6 +1,6 @@
 package base.application.util.auth;
 
-import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.util.Arrays;
 
@@ -14,8 +14,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 public class PasswordUtilTests {
 
     @Test
-    public void checkErrorTest() {
+    public void validation() {
         String[] passwords = { "Pass12", "Pass!@#$%^&", "pass\\-_!" };
-        Arrays.stream(passwords).forEach(a -> assertFalse("check password test: " + a, PasswordUtil.checkError(a)));
+        Arrays.stream(passwords).forEach(a -> assertTrue("check password test: " + a, PasswordUtil.isValid(a)));
     }
 }

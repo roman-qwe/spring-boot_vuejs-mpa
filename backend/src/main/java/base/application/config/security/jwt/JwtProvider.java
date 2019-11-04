@@ -14,16 +14,18 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
-import base.application.data.db.base.model.user.general.GUser;
 import base.application.util.auth.PasswordUtil;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jws;
-import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.MalformedJwtException;
+import io.jsonwebtoken.SignatureException;
+import io.jsonwebtoken.UnsupportedJwtException;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -35,105 +37,90 @@ public class JwtProvider {
         return PasswordUtil.B_CRYPT_PASSWORD_ENCODER;
     }
 
-    public String create(GUser user) {
-        if (user == null || user.getName() == null || user.getRole() == null)
+    public JwtCookie getJwtCookie(HttpServletRequest req) {
+        Cookie cookie = getTokenCookie(req, JwtConfig.AUTH_NAME);
+        if (cookie == null)
             return null;
-        return generateToken(user.getName(), user.getRole().getName());
+        String token = cookie.getValue();
+        if (token == null || token.isBlank())
+            return null;
+        String cToken = refinement(cookie.getValue(), JwtConfig.PREFIX);
+        if (!isValidToken(cToken))
+            return null;
+        JwtDetail detail = JwtDetail.from(cToken);
+        if (!JwtDetail.isValid(detail))
+            return null;
+        log.info("IN getJwtCookie detail: {}", detail);
+        return new JwtCookie(detail, token);
     }
 
-    public String create(Authentication auth) {
-        log.info("IN create Authentication auth.getAuthorities().stream().findFirst().get().getAuthority(): ",
-                auth.getAuthorities().stream().findFirst().get().getAuthority());
-        String username = auth.getName();
-        if (username == null)
+    public JwtCookie createJwtCookie(JwtDetail detail) {
+        if (!JwtDetail.isValid(detail))
             return null;
-        Optional<? extends GrantedAuthority> oRole = auth.getAuthorities().stream().findFirst();
-        if (oRole == null || oRole.isEmpty())
+        String token = detail.createToken();
+        if (token == null || token.isBlank())
             return null;
-        String role = oRole.get().getAuthority();
-        if (role == null)
-            return null;
-        return generateToken(username, role);
+        log.info("IN createJwtCookie token: {}", token);
+        return new JwtCookie(detail, token);
     }
 
-    private String generateToken(String username, String role) {
-        Claims claims = Jwts.claims().setSubject(username);
-        claims.put("role", role);
-
-        Date now = new Date();
-        Date validity = new Date(now.getTime() + JwtConfig.VALIDATE_MILLISECONDS);
-
-        return JwtConfig.PREFIX + Jwts.builder()//
-                .setClaims(claims)//
-                .setIssuedAt(now)//
-                .setExpiration(validity)//
-                .signWith(SignatureAlgorithm.HS256, JwtConfig.ENCODED_SECRET)//
-                .compact();
-    }
-
-    public boolean validate(String uToken) {
-        String token = refinement(uToken);
-        if (token == null)
-            return false;
-        log.info("IN JwtProvider - validate token: {}", token);
-        Jws<Claims> claims = null;
-
-        try {
-            claims = Jwts.parser().setSigningKey(JwtConfig.ENCODED_SECRET).parseClaimsJws(token);
-        } catch (JwtException | IllegalArgumentException e) {
-            return false;
-        }
-
-        log.info("IN JwtProvider - validate claims: {}", claims);
-
-        if (claims != null && claims.getBody().getExpiration().before(new Date()))
-            return false;
-
-        return true;
-    }
-
-    public Authentication getAuthentication(String uToken) {
-        String token = refinement(uToken);
-        if (token == null)
+    public JwtCookie createAndSetAuth(JwtDetail detail) {
+        log.info("IN createAndSetAuth JwtDetail: {}", detail);
+        JwtCookie cookie = createJwtCookie(detail);
+        if (!JwtCookie.isValid(cookie))
+            return null;
+        log.info("IN createAndSetAuth jwtCookie: {}", cookie);
+        Authentication auth = getAuth(cookie);
+        if (auth == null)
             return null;
 
-        log.info("IN getAuthentication - token: {}", token);
+        SecurityContextHolder.getContext().setAuthentication(auth);
+        return cookie;
+    }
 
-        Jws<Claims> parsedToken = Jwts.parser().setSigningKey(JwtConfig.ENCODED_SECRET).parseClaimsJws(token);
-        String username = getUsername(token);
+    private Authentication getAuth(JwtCookie cookie) {
+        if (!JwtCookie.isValid(cookie))
+            return null;
         Collection<? extends GrantedAuthority> authorities = Collections
-                .singleton(new SimpleGrantedAuthority((String) parsedToken.getBody().get("role")));
-
-        log.info("IN getAuthentication - authorities.size(): {}", authorities.size());
-        if (username != null) {
-            return new UsernamePasswordAuthenticationToken(username, null, authorities);
-        }
-        return null;
+                .singleton(new SimpleGrantedAuthority(cookie.getDetail().getRole()));
+        return new UsernamePasswordAuthenticationToken(cookie.getDetail().getUsername(), null, authorities);
     }
 
-    public Cookie getTokenCookie(HttpServletRequest req) {
+    private Cookie getTokenCookie(HttpServletRequest req, String cookieName) {
         HttpServletRequest httpReq = (HttpServletRequest) req;
-
         Cookie[] cookies = httpReq.getCookies();
-        if (cookies == null) {
+        if (cookies == null || cookies.length == 0)
             return null;
-        }
-
-        Optional<Cookie> oCookie = Arrays.stream(cookies).filter(a -> a.getName().equals(JwtConfig.AUTH_NAME)).findFirst();
-        if (oCookie == null || oCookie.isEmpty()) {
+        Optional<Cookie> oCookie = Arrays.stream(cookies).filter(a -> a.getName().equals(cookieName)).findFirst();
+        if (oCookie == null || oCookie.isEmpty())
             return null;
-        }
-
         return oCookie.get();
     }
 
-    private String refinement(String token) {
-        if (!token.startsWith(JwtConfig.PREFIX))
+    private static String refinement(String token, String jwtPrefix) {
+        if (token == null || token.isBlank() || !token.startsWith(jwtPrefix))
             return null;
-        return token.substring(JwtConfig.PREFIX.length(), token.length());
+        return token.substring(jwtPrefix.length(), token.length());
     }
 
-    private String getUsername(String token) {
-        return Jwts.parser().setSigningKey(JwtConfig.ENCODED_SECRET).parseClaimsJws(token).getBody().getSubject();
+    private boolean isValidToken(String token) {
+        if (token == null || token.isBlank())
+            return false;
+        Jws<Claims> claims = null;
+        try {
+            log.info("before claims token: {}", token);
+            claims = Jwts.parser().setSigningKey(JwtConfig.ENCODED_SECRET).parseClaimsJws(token);
+            log.info("after claims");
+        } catch (ExpiredJwtException | MalformedJwtException | SignatureException | UnsupportedJwtException
+                | IllegalArgumentException e) {
+            log.info(e.toString());
+            return false;
+        }
+        log.info("claims received without exception");
+
+        if (claims == null || claims.getBody().getExpiration().before(new Date()))
+            return false;
+
+        return true;
     }
 }

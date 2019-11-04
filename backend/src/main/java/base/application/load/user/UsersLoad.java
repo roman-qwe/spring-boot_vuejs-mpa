@@ -1,7 +1,5 @@
 package base.application.load.user;
 
-import com.cosium.spring.data.jpa.entity.graph.domain.EntityGraphs;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -44,7 +42,7 @@ public class UsersLoad {
             System.out.println("admin saved");
         }
 
-        log.info("IN Run user with user.profile: {}", userRepository.findByName("user", EntityGraphs.named("User.profile")).getProfile().getEmail());
+        log.info("IN Run user with user.profile: {}", userRepository.findByName("user").getProfile().getEmail());
         log.info("IN Run simple user: {}", userRepository.findByName("user"));
 
         userProfileRepository.findAll().forEach(System.out::println);

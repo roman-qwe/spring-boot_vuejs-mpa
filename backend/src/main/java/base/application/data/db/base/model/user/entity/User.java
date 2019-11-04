@@ -4,9 +4,6 @@ import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
 import javax.persistence.FetchType;
-import javax.persistence.NamedAttributeNode;
-import javax.persistence.NamedEntityGraph;
-import javax.persistence.NamedEntityGraphs;
 import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
@@ -24,8 +21,6 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @Entity
 @Table(name = "user")
-@NamedEntityGraphs(value = {
-        @NamedEntityGraph(name = "User.profile", attributeNodes = { @NamedAttributeNode("profile") }) })
 @EntityListeners({ UserListener.class })
 public class User extends GUser {
 

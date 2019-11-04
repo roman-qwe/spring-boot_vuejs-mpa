@@ -1,7 +1,7 @@
 package base.application.util.auth;
 
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertFalse;
 
 import java.util.Arrays;
 
@@ -15,11 +15,11 @@ import org.springframework.test.context.junit4.SpringRunner;
 public class UsernameUtilTests {
 
     @Test
-    public void checkErrorTest() {
+    public void validation() {
         String[] usernamesFalse = { "name12", "name-_", "123456" };
         Arrays.stream(usernamesFalse)
-                .forEach(a -> assertFalse("check username test: " + a, UsernameUtil.checkError(a)));
+                .forEach(a -> assertTrue("check username test: " + a, UsernameUtil.isValid(a)));
         String[] usernamesTrue = { "name1!", "", "-_-" };
-        Arrays.stream(usernamesTrue).forEach(a -> assertTrue("check username test: ", UsernameUtil.checkError(a)));
+        Arrays.stream(usernamesTrue).forEach(a -> assertFalse("check username test: ", UsernameUtil.isValid(a)));
     }
 }

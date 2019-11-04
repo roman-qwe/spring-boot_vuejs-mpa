@@ -13,8 +13,8 @@ public class PasswordUtil {
     public static final Pattern PASSWORD_REGEX = Pattern.compile("[a-zA-Z0-9!@#$%^&\\\\\\-_]+");
     public static final BCryptPasswordEncoder B_CRYPT_PASSWORD_ENCODER = new BCryptPasswordEncoder(PASSWORD_STRENGTH);
 
-    public static boolean checkError(String password) {
-        return password == null || password.length() < PASSWORD_LENGTH_MIN || password.length() > PASSWORD_LENGTH_MAX
-                || !PASSWORD_REGEX.matcher(password).matches();
+    public static boolean isValid(String password) {
+        return password != null && password.length() >= PASSWORD_LENGTH_MIN && password.length() <= PASSWORD_LENGTH_MAX
+                && PASSWORD_REGEX.matcher(password).matches();
     }
 }
