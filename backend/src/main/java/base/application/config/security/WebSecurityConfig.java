@@ -1,13 +1,7 @@
 package base.application.config.security;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-
 import javax.sql.DataSource;
 
-import com.google.common.base.Strings;
-import com.google.common.collect.Iterables;
 import com.google.common.collect.ObjectArrays;
 
 import org.springframework.beans.factory.annotation.Autowired;
