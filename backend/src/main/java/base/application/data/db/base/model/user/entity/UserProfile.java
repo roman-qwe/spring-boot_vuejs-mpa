@@ -17,7 +17,7 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @Entity
 @Table(name = "user_profile")
-@EntityListeners({ UserProfileListener.class })
+// @EntityListeners({ UserProfileListener.class })
 public class UserProfile extends GUserProfile {
 
 }

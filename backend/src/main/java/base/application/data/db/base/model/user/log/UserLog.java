@@ -3,14 +3,22 @@ package base.application.data.db.base.model.user.log;
 import javax.persistence.AttributeOverride;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.google.common.base.Strings;
+
+import base.application.data.db.base.model.user.entity.User;
 import base.application.data.db.base.model.user.general.GUser;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Getter
 @Setter
 @SuperBuilder(toBuilder = true)
@@ -24,6 +32,7 @@ public class UserLog extends GUser {
     protected Long userId;
 
     public static UserLog from(GUser user) {
+        log.info("IN from user.getId: {}", user.getId());
         return user == null ? null
                 : UserLog.builder().userId(user.getId()).name(user.getName()).password(user.getPassword())
                         .active(user.getActive()).role(user.getRole()).build();
@@ -32,6 +41,6 @@ public class UserLog extends GUser {
     @Override
     public String toString() {
         return String.format("id: %s, userId: %s, name: %s, pass(nullOrEmpty?): %s, active: %s, role: %s.", id, userId,
-                name, password == null || password.isEmpty(), active, role);
+                name, Strings.isNullOrEmpty(password), active, role);
     }
 }

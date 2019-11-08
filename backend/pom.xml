@@ -16,7 +16,7 @@
 	</parent>
 
 	<properties>
-		<java.version>11</java.version>
+		<java.version>14</java.version>
 		<!-- <sb.version>2.2.0.RELEASE</sb.version> -->
 		<!-- <ss.version>5.2.0.RELEASE</ss.version> -->
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -42,7 +42,7 @@
 		  <dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-dependencies</artifactId>
-			<version>2.2.0.RELEASE</version>
+			<version>2.2.1.RELEASE</version>
 			<type>pom</type>
 			<scope>import</scope>
 		  </dependency>

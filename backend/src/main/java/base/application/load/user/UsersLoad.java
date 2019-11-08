@@ -6,8 +6,7 @@ import org.springframework.stereotype.Component;
 import base.application.data.db.base.model.user.entity.User;
 import base.application.data.db.base.model.user.entity.UserProfile;
 import base.application.data.db.base.model.user.role.Role;
-import base.application.data.db.base.repository.user.UserProfileRepository;
-import base.application.data.db.base.repository.user.UserRepository;
+import base.application.data.db.base.service.UserService;
 import base.application.util.auth.PasswordUtil;
 import lombok.extern.slf4j.Slf4j;
 
@@ -15,36 +14,32 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 public class UsersLoad {
 
-    UserRepository userRepository;
-    UserProfileRepository userProfileRepository;
+    UserService userService;
 
     @Autowired
-    public UsersLoad(UserRepository userRepository, UserProfileRepository userProfileRepository) {
-        this.userRepository = userRepository;
-        this.userProfileRepository = userProfileRepository;
+    public UsersLoad(UserService userService) {
+        this.userService = userService;
     }
 
     public void Run() {
-        if (!userRepository.existsByName("admin")) {
+        if (!userService.existsByName("admin")) {
             User admin = User.builder().name("admin")
                     .password(PasswordUtil.B_CRYPT_PASSWORD_ENCODER.encode("admin_password")).role(Role.ADMIN).build();
             System.out.println("admin builded");
-            userRepository.save(admin);
+            userService.save(admin);
             System.out.println("admin saved");
         }
-        if (!userRepository.existsByName("user")) {
+        if (!userService.existsByName("user")) {
             User user = User.builder().name("user")
                     .password(PasswordUtil.B_CRYPT_PASSWORD_ENCODER.encode("user_password")).role(Role.USER).build();
             user.setProfile(UserProfile.builder().email("user@email.com").build());
             user.getProfile().setUser(user);
             System.out.println("user builded");
-            userRepository.save(user);
+            userService.save(user);
             System.out.println("admin saved");
         }
 
-        log.info("IN Run user with user.profile: {}", userRepository.findByName("user").getProfile().getEmail());
-        log.info("IN Run simple user: {}", userRepository.findByName("user"));
-
-        userProfileRepository.findAll().forEach(System.out::println);
+        log.info("IN Run simple user: {}", userService.findByName("user"));
+        log.info("IN Run user with user.profile: {}", userService.findByNameWithProfile("user").getProfile());
     }
 }

@@ -31,6 +31,7 @@ public class UserListener {
         UserLog userLog = UserLog.from(user);
         if (userLog == null)
             return;
+        log.info("IN changed userLog: {}", userLog);
         userLogRepository.save(userLog);
     }
 
