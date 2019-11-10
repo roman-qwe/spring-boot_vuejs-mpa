@@ -35,7 +35,7 @@ public class UserService {
         return userRepository.findByName(name);
     }
 
-    @Transactional(propagation = Propagation.REQUIRED)
+    @Transactional
     public User findByNameWithProfile(String name) {
         log.info("IN findByNameWithProfile with profile");
 

@@ -3,14 +3,10 @@ package base.application.data.db.base.model.user.log;
 import javax.persistence.AttributeOverride;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.google.common.base.Strings;
 
-import base.application.data.db.base.model.user.entity.User;
 import base.application.data.db.base.model.user.general.GUser;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

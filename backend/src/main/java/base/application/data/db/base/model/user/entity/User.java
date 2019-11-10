@@ -5,9 +5,7 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-
-import org.hibernate.annotations.FetchMode;
-import org.hibernate.annotations.FetchProfile;
+import javax.persistence.Transient;
 
 import base.application.data.db.base.model.user.general.GUser;
 import lombok.Getter;
@@ -24,10 +22,11 @@ import lombok.experimental.SuperBuilder;
 // @EntityListeners({ UserListener.class })
 public class User extends GUser {
 
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER, targetEntity = UserProfile.class)
+    // @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER, targetEntity = UserProfile.class)
     // @Fetch(FetchMode.JOIN)
     // @PrimaryKeyJoinColumn(name = "user_id")
     // @LazyToOne(value = LazyToOneOption.NO_PROXY)
+    @Transient
     protected UserProfile profile;
 
 }

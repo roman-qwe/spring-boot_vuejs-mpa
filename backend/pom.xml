@@ -17,28 +17,12 @@
 
 	<properties>
 		<java.version>14</java.version>
-		<!-- <sb.version>2.2.0.RELEASE</sb.version> -->
-		<!-- <ss.version>5.2.0.RELEASE</ss.version> -->
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 	</properties>
 
 	<dependencyManagement>
 		<dependencies>
-		  <!-- <dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-framework-bom</artifactId>
-			<version>5.2.0.RELEASE</version>
-			<type>pom</type>
-			<scope>import</scope>
-		  </dependency>-->
-		  <!-- <dependency>
-			<groupId>org.springframework.security</groupId>
-			<artifactId>spring-security-bom</artifactId>
-			<version>5.2.0.RELEASE</version>
-			<type>pom</type>
-			<scope>import</scope>
-		  </dependency>  -->
 		  <dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-dependencies</artifactId>
@@ -73,7 +57,6 @@
 			<artifactId>spring-boot-starter-thymeleaf</artifactId>
 		</dependency>
 		<dependency>
-			<!-- JPA Data (We are going to use Repositories, Entities, Hibernate, etc...) -->
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
 		</dependency>
@@ -103,7 +86,6 @@
 			<version>2.5.1</version>
 		</dependency>
 		<dependency>
-			<!--Аннотации Getter, Builder и т.д.-->
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
 			<version>1.18.10</version>
@@ -115,13 +97,11 @@
 			<version>0.9.1</version>
 		</dependency>
 		<dependency>
-			<!-- java version 14 -->
 			<groupId>org.xmlbeam</groupId>
 			<artifactId>xmlprojector</artifactId>
 			<version>1.4.16</version>
 		</dependency>
 		<dependency> 
-			<!-- java version 14 -->
 			<groupId>org.springframework.ldap</groupId>
 			<artifactId>spring-ldap-core</artifactId>
 			<version>2.3.2.RELEASE</version>
@@ -205,46 +185,6 @@
 					</execution>
 				</executions>
 			</plugin>
-			<!-- <plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.8.1</version>
-				<configuration>
-					<release>${java.version}</release>
-					<argLine>
-						illegal-access=permit
-					</argLine>
-				</configuration>
-				<dependencies>
-					<dependency>
-						<groupId>org.ow2.asm</groupId>
-						<artifactId>asm</artifactId>
-						<version>7.2</version>
-					</dependency>
-				</dependencies>
-			</plugin> -->
-			<!-- reflection -->
-			<!-- <plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-surefire-plugin</artifactId>
-				<version>2.22.2</version>
-				<configuration>
-					<argLine>
-							illegal-access=permit
-						</argLine>
-				</configuration>
-			</plugin> -->
-			<!-- <plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-failsafe-plugin</artifactId>
-				<version>2.22.2</version>
-				<configuration>
-					<argLine>
-							illegal-access=permit
-						</argLine>
-				</configuration>
-			</plugin> -->
-			<!-- end reflection -->
 		</plugins>
 	</build>
 
