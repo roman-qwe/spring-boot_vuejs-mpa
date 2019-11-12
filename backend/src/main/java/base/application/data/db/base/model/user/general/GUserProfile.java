@@ -5,6 +5,8 @@ import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.EntityListeners;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.MapsId;
@@ -31,15 +33,9 @@ import lombok.experimental.SuperBuilder;
 public abstract class GUserProfile {
 
     @Id
-    // @GeneratedValue(strategy = GenerationType.AUTO)
-    // @Column(name = "id", nullable = false, updatable = false)
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id", nullable = false, updatable = false)
     protected Long id;
-
-    @OneToOne(fetch = FetchType.LAZY)
-    @MapsId
-    // @JoinColumn(name = "user_id", nullable = false, unique = false)
-    // @Column(name = "user_id", nullable = false, updatable = false)
-    protected User user;
 
     @Column
     protected String email;

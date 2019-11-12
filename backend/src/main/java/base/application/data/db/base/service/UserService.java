@@ -1,9 +1,7 @@
 package base.application.data.db.base.service;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import base.application.data.db.base.model.user.entity.User;
@@ -39,17 +37,24 @@ public class UserService {
     public User findByNameWithProfile(String name) {
         log.info("IN findByNameWithProfile with profile");
 
-        log.info("IN findByNameWithProfile select user");
+        // log.info("IN findByNameWithProfile select user");
         User user = userRepository.findByName(name);
-        log.info("IN findByNameWithProfile select profile");
+        // log.info("IN findByNameWithProfile select profile");
         UserProfile profile = userProfileRepository.findProfileByUser(user);
-
         user.setProfile(profile);
         return user;
     }
 
+    @Transactional
     public User save(User user) {
-        return userRepository.save(user);
+        UserProfile uProfile = user.getProfile();
+        if (uProfile == null)
+            return userRepository.save(user);
+
+        uProfile.setUser(user);
+        userRepository.save(user);
+        uProfile = userProfileRepository.save(uProfile);
+        return uProfile.getUser();
     }
 
 }

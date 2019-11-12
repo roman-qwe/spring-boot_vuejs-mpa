@@ -33,10 +33,10 @@ public class UsersLoad {
             User user = User.builder().name("user")
                     .password(PasswordUtil.B_CRYPT_PASSWORD_ENCODER.encode("user_password")).role(Role.USER).build();
             user.setProfile(UserProfile.builder().email("user@email.com").build());
-            user.getProfile().setUser(user);
+            // user.getProfile().setUser(user);
             System.out.println("user builded");
             userService.save(user);
-            System.out.println("admin saved");
+            System.out.println("user saved");
         }
 
         log.info("IN Run simple user: {}", userService.findByName("user"));

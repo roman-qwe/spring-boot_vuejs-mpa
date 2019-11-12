@@ -7,6 +7,7 @@ import javax.persistence.Table;
 
 import com.google.common.base.Strings;
 
+import base.application.data.db.base.model.user.entity.User;
 import base.application.data.db.base.model.user.general.GUser;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -27,7 +28,7 @@ public class UserLog extends GUser {
     @Column(name = "user_id", nullable = false, updatable = false)
     protected Long userId;
 
-    public static UserLog from(GUser user) {
+    public static UserLog from(User user) {
         log.info("IN from user.getId: {}", user.getId());
         return user == null ? null
                 : UserLog.builder().userId(user.getId()).name(user.getName()).password(user.getPassword())
