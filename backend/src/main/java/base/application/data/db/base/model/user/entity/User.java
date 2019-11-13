@@ -2,7 +2,6 @@ package base.application.data.db.base.model.user.entity;
 
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
-import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
